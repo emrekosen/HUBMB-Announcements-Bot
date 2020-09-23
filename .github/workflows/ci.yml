@@ -1,0 +1,41 @@
+name: EveryFive
+
+on:
+  push:
+  schedule:
+    # Execute CI at every 5th minute
+    - cron: '0 0 0/1 1/1 * ? *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Get Announcements
+    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Python OPS
+      shell: bash
+      run: |
+        python -m pip install -r requirements.txt
+        python scraper.py
+      env:
+        IFTTT_WEBHOOKS_KEY: ${{ secrets.IFTTT_WEBHOOKS_KEY }}
+        IFTTT_EVENT: ${{ secrets.IFTTT_EVENT }}
+    - name: Upload files
+      uses: actions/upload-artifact@v2
+      with:
+        name: tweet
+        path: tweet.txt
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add previousEarthquakes.json
+        git diff-index --quiet HEAD || git commit -m "Add [skip-ci]"
+        git push

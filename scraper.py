@@ -45,6 +45,9 @@ def writeDataToFile(data):
     except Exception as e:
         print(e)
 
+def saveDataToFile(data):
+    with open('tweet.txt', 'w') as output_file:
+        output_file.write(data)
 
 def checkDiff(oldData, newData):
     diffList = [i for i in newData if i not in oldData]
@@ -52,10 +55,11 @@ def checkDiff(oldData, newData):
 
 
 def sendTweet(data):
-    webHookKey = os.getenv("WEBHOOKS_KEY")
-    eventName = os.getenv("IFTTT_EVENT_NAME")
+    webHookKey = os.getenv("IFTTT_WEBHOOKS_KEY")
+    eventName = os.getenv("IFTTT_EVENT")
     for anno in data:
         payload = {'value1': anno['subject'], 'value2': announcementsURL+"?"+anno['url']}
+        saveDataToFile(anno['subject'])
         r = requests.post(f'https://maker.ifttt.com/trigger/{eventName}/with/key/{webHookKey}', data=payload)
         if(r.status_code == 200):
             print("Tweet sent.")
