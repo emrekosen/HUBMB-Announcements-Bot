@@ -60,7 +60,7 @@ def sendTweet(data):
     for anno in data:
         payload = {'value1': anno['subject'], 'value2': announcementsURL+"?"+anno['url']}
         saveDataToFile(anno['subject'])
-        r = requests.post(f'https://maker.ifttt.com/trigger/{eventName}/with/key/{webHookKey}', data=payload)
+        r = requests.post('https://maker.ifttt.com/trigger/' + eventName + '/with/key/' + webHookKey, data=payload)
         if(r.status_code == 200):
             print("Tweet sent.")
         else:

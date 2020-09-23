@@ -1,3 +1,3 @@
-dotenv
+python-dotenv
 bs4
 requests
