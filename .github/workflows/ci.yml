@@ -4,7 +4,7 @@ on:
   push:
   schedule:
     # Execute CI at every 5th minute
-    - cron: '0 * * * *'
+    - cron: '*/30 * * * *'
 
 jobs:
   build:
@@ -36,6 +36,6 @@ jobs:
     - run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add previousEarthquakes.json
+        git add oldAnnouncements.json
         git diff-index --quiet HEAD || git commit -m "Add [skip-ci]"
         git push
