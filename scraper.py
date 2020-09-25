@@ -5,7 +5,7 @@ import json
 import os
 
 load_dotenv()
-announcementsURL = "http://cs.hacettepe.edu.tr/announcements.html"
+announcementsURL = "http://cs.hacettepe.edu.tr/"
 
 def getPage(url):
     try:
@@ -18,10 +18,11 @@ def getPage(url):
 def parseHTML(html):
     soup = BeautifulSoup(html, 'html.parser')
 
-    subjectElements = soup.find_all('div', {'class': 'accordionButton'})
-    contentElements = soup.find_all('div', {'class': 'accordionContent'})
+    annoDiv = soup.find('div', {'id': 'duyurular_ic'})
+    subjectElements = annoDiv.find_all('a')
+
     annoSubjects = [i.text for i in subjectElements]
-    annoIDs = [i.get('id') for i in contentElements]
+    annoIDs = [i['href'] for i in subjectElements]
 
     return [{'subject': annoSubjects[i], 'url': annoIDs[i]} for i in range(0, len(annoSubjects))]
 
@@ -57,8 +58,9 @@ def checkDiff(oldData, newData):
 def sendTweet(data):
     webHookKey = os.getenv("IFTTT_WEBHOOKS_KEY")
     eventName = os.getenv("IFTTT_EVENT")
+
     for anno in data:
-        payload = {'value1': anno['subject'], 'value2': announcementsURL+"?"+anno['url']}
+        payload = {'value1': anno['subject'], 'value2': announcementsURL +anno['url']}
         saveTweetDataToFile(anno['subject'])
         r = requests.post('https://maker.ifttt.com/trigger/' + eventName + '/with/key/' + webHookKey, data=payload)
         if(r.status_code == 200):
@@ -71,7 +73,9 @@ def main():
     newAnnouncements = parseHTML(response)
     oldAnnouncements = readDataFile()
     diff = checkDiff(oldAnnouncements, newAnnouncements)
+    print(diff)
     if(len(diff) > 0):
+
         sendTweet(diff)
         writeDataToFile(newAnnouncements)
     else:
