@@ -71,7 +71,9 @@ def main():
     newAnnouncements = parseHTML(response)
     oldAnnouncements = readDataFile()
     diff = checkDiff(oldAnnouncements, newAnnouncements)
+    print(diff)
     if(len(diff) > 0):
+
         sendTweet(diff)
         writeDataToFile(newAnnouncements)
     else:
