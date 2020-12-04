@@ -1,9 +1,9 @@
-name: EveryFive
+name: EveryThirty
 
 on:
   push:
   schedule:
-    # Execute CI at every 5th minute
+    # Execute CI at every 30 minute
     - cron: '*/30 * * * *'
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     strategy:
       matrix:
-        node-version: [14.x]
+        python-version: [3.7]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
