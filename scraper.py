@@ -45,8 +45,8 @@ def writeDataToFile(data):
         print(e)
 
 def saveTweetDataToFile(data):
-    with open('tweet.txt', 'w') as output_file:
-        output_file.write(data.encode('utf-8'))
+    with open('tweet.txt', 'w', encoding='utf-8') as output_file:
+        output_file.write(data)
 
 def checkDiff(oldData, newData):
     diffList = [i for i in newData if i not in oldData]
