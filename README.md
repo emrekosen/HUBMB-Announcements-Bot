@@ -1,7 +1,7 @@
 # HUBMB Announcements Bot
 A python bot tweets announcements that posted on [HUBMB Website](http://cs.hacettepe.edu.tr/).
 
-Follow me on  ![Twitter](http://i.imgur.com/wWzX9uB.png) [Twitter](https://twitter.com/hu_bbm)
+Follow the bot on  ![Twitter](http://i.imgur.com/wWzX9uB.png) [Twitter](https://twitter.com/hu_bbm)
 
 ## Contributing
 
